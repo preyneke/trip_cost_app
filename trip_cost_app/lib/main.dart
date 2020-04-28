@@ -4,33 +4,36 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget {  
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Hello You',
+      return MaterialApp(
+      title: 'Trip Cost Calculator',
       theme: ThemeData(
 
         primarySwatch: Colors.blue,
       ),
-      home: HelloYou(),
+      home: FuelForm(),
     );
   }
 }
 
-class HelloYou extends StatefulWidget{
+class FuelForm extends StatefulWidget{
   @override
-  State<StatefulWidget> createState() => _HelloYouState();
+  State<StatefulWidget> createState() => _FuelFormState();
 
   }
 
-  class _HelloYouState extends State<HelloYou>{
-  String name = '';
+  class _FuelFormState extends State<FuelForm>{ 
+  
   final _currencies = ['Dollars', 'Euro', 'Pounds'];
   String _currency = 'Dollars';
+  TextEditingController distanceController = TextEditingController();
+  String result = '';
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = Theme.of(context).textTheme.headline6;
 
     return Scaffold(
       appBar: AppBar(
@@ -42,13 +45,15 @@ class HelloYou extends StatefulWidget{
         child: Column(
           children: <Widget>[
             TextField(
+              controller: distanceController,
               decoration: InputDecoration(
-                hintText: 'Please insert your name' ) ,
-              onChanged: (String string){
-                setState(() {
-                  name = string;
-                });
-              },
+                labelText: 'Distance',
+                hintText: 'e.g 124',
+                labelStyle: textStyle,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5.0)
+                ) ) ,
+                keyboardType: TextInputType.number,            
             ),
             DropdownButton<String>(
               items:_currencies.map((String value){
@@ -62,7 +67,16 @@ class HelloYou extends StatefulWidget{
                 _onDropDownChanged(value);
               } ,
               ),
-            Text('Hello ' + name + '!')
+              RaisedButton(
+                color: Theme.of(context).primaryColorDark ,
+                textColor: Theme.of(context).primaryColorLight,
+                onPressed: (){
+                  setState(() {
+                    result = distanceController.text;
+                  });
+                },
+                child: Text('Submit')),
+            Text(result)
           ],
         ),
       ),
